@@ -1,9 +1,6 @@
 import sys
 
 
-precision = 6
-
-
 class InputError(Exception):
     def __init__(self, equation):
         Exception.__init__(self)
@@ -46,7 +43,7 @@ def display_constant_solution(c):
 
 
 def display_linear_solution(b, c):
-    print("The solution is: {}".format(round(- c / b, precision)))
+    print("The solution is: {}".format(round(- c / b, 6)))
     return
 
 
@@ -58,15 +55,15 @@ def display_quadratic_solution(a, b, c):
         second_part = sqrt / (2 * a)
         if D > 0:
             print("Discriminant is strictly positive, the two solutions are:")
-            print(round(first_part + second_part, precision))
-            print(round(first_part - second_part, precision))
+            print(round(first_part + second_part, 6))
+            print(round(first_part - second_part, 6))
         else:
             print("Discriminant less than zero, the two complex solutions are:")
-            print("{0} + {1} * i".format(round(first_part, precision), round(second_part, precision)))
-            print("{0} - {1} * i".format(round(first_part, precision), round(second_part, precision)))
+            print("{0} + {1} * i".format(round(first_part, 6), round(second_part, 6)))
+            print("{0} - {1} * i".format(round(first_part, 6), round(second_part, 6)))
     else:
         print("Discriminant is zero")
-        print("The solution is: {}".format(round(-b / (2 * a), precision)))
+        print("The solution is: {}".format(round(-b / (2 * a), 6)))
     return
 
 
