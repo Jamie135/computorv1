@@ -37,6 +37,11 @@ def discriminant(a, b, c):
     return b * b - 4 * a * c
 
 
+def format_solution(value):
+    rounded_value = round(value, 6)
+    return 0 if rounded_value == -0.0 else rounded_value
+
+
 def constant_solution(c):
     if c == 0:
         print("The equation has any real solution")
@@ -46,7 +51,8 @@ def constant_solution(c):
 
 
 def linear_solution(b, c):
-    print("The solution is: {}".format(round(- c / b, 6)))
+    solution = format_solution(-c / b)
+    print("The solution is: {}".format(solution))
     return
 
 
@@ -58,15 +64,15 @@ def quadratic_solution(a, b, c):
         imaginary = sqrt / (2 * a)
         if D > 0:
             print("Discriminant is strictly positive, the two solutions are:")
-            print(round(real + imaginary, 6))
-            print(round(real - imaginary, 6))
+            print(format_solution(real + imaginary))
+            print(format_solution(real - imaginary))
         else:
             print("Discriminant less than zero, the two complex solutions are:")
-            print("{0} + {1} * i".format(round(real, 6), round(imaginary, 6)))
-            print("{0} - {1} * i".format(round(real, 6), round(imaginary, 6)))
+            print("{0} + {1} * i".format(format_solution(real), format_solution(imaginary)))
+            print("{0} - {1} * i".format(format_solution(real), format_solution(imaginary)))
     else:
         print("Discriminant is zero")
-        print("The solution is: {}".format(round(-b / (2 * a), 6)))
+        print("The solution is: {}".format(format_solution(-b / (2 * a))))
     return
 
 
