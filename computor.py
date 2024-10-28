@@ -85,7 +85,7 @@ def parseCoefficients(part):
         coefficient, var = elem.split('*')
         var, degree = var.split('^')
 
-        # print(f"coefficient: {coefficient}\nvar: {var}\ndegree: {degree}")
+        print(f"coefficient: {coefficient}\nvar: {var}\ndegree: {degree}")
         if var != 'X' and var != 'x':
             raise InputError('The variable can only be X or x')
 
@@ -141,7 +141,14 @@ def calculateCoefficients(equation):
 
 def display_information(a, b, c, degree):
     print("\nPolynomial degree: {}".format(degree))
-    print("Reduced form: {0} * X^2 + {1} * X^1 + {2} * X^0 = 0".format(a, b, c))
+    if (a == 0):
+        print("Reduced form: {0} * X^1 + {1} * X^0 = 0".format(b, c))
+    elif (b == 0):
+        print("Reduced form: {0} * X^2 + {1} * X^0 = 0".format(a, c))
+    elif (c == 0):
+        print("Reduced form: {0} * X^2 + {1} * X^1 = 0".format(a, b))
+    else:
+        print("Reduced form: {0} * X^2 + {1} * X^1 + {2} * X^0 = 0".format(a, b, c))
     return
 
 
