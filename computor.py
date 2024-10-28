@@ -121,6 +121,10 @@ def parseEquation(equation):
 
     if len(parts) != 2:
         raise InputError("An equation has more than one equal sign or none at all")
+    for part in parts:
+        for term in part:
+            if term == '':
+                raise InputError("Invalid term in the equation")
     return parts
 
 
