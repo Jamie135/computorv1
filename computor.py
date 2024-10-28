@@ -12,10 +12,13 @@ def ft_abs(x):
 
 
 def ft_sqrt(n, EPS=1E-10):
+    # initial guess
     x = 1
+    # loop until the difference between the actual guess and the previous guess is less than EPS
     while 1:
+        # actual guess is the average of the previous guess and n divided by the previous guess
         nx = (x + n / x) / 2
-        if abs(x - nx) < EPS:
+        if ft_abs(x - nx) < EPS:
             break
         x = nx
     return x
