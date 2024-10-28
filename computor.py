@@ -70,12 +70,6 @@ def quadratic_solution(a, b, c):
     return
 
 
-def display_information(a, b, c, degree):
-    print("\nPolynomial degree: {}".format(degree))
-    print("Reduced form: {0} * X^2 + {1} * X^1 + {2} * X^0 = 0".format(a, b, c))
-    return
-
-
 def parseCoefficients(part):
     a = 0.0
     b = 0.0
@@ -143,6 +137,12 @@ def calculateCoefficients(equation):
             b -= b_tmp
             c -= c_tmp
     return a, b, c
+
+
+def display_information(a, b, c, degree):
+    print("\nPolynomial degree: {}".format(degree))
+    print("Reduced form: {0} * X^2 + {1} * X^1 + {2} * X^0 = 0".format(a, b, c))
+    return
 
 
 def display_solution(a, b, c, degree):
