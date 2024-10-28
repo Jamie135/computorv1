@@ -70,7 +70,7 @@ def quadratic_solution(a, b, c):
     return
 
 
-def parseCoefficients(part):
+def parseCoefficients(part, parts):
     a = 0.0
     b = 0.0
     c = 0.0
@@ -85,7 +85,8 @@ def parseCoefficients(part):
         coefficient, var = elem.split('*')
         var, degree = var.split('^')
 
-        print(f"coefficient: {coefficient}\nvar: {var}\ndegree: {degree}")
+        # print(f"parts: {parts}")
+        # print(f"coefficient: {coefficient}\nvar: {var}\ndegree: {degree}")
         if var != 'X' and var != 'x':
             raise InputError('The variable can only be X or x')
 
@@ -97,8 +98,9 @@ def parseCoefficients(part):
             elif int(degree) == 0:
                 c += float(coefficient)
             else:
-                print("\nPolynomial degree: {0}".format(int(degree)))
-                sys.exit("The polynomial degree is strictly greater than 2, I can't solve.")
+                if elem not in parts[1]:
+                    print("\nPolynomial degree: {0}".format(int(degree)))
+                    sys.exit("The polynomial degree is strictly greater than 2, I can't solve.")
 
         except ValueError:
             raise InputError('Incorrect degree. Must be greater then 0')
@@ -124,7 +126,7 @@ def calculateCoefficients(equation):
 
     # print(f"parts: {parts}")
     for index, part in enumerate(parts):
-        a_tmp, b_tmp, c_tmp = parseCoefficients(part)
+        a_tmp, b_tmp, c_tmp = parseCoefficients(part, parts)
 
         # index = 0 means left side of the equation
         # index = 1 means right side of the equation
@@ -141,7 +143,15 @@ def calculateCoefficients(equation):
 
 def display_information(a, b, c, degree):
     print("\nPolynomial degree: {}".format(degree))
-    if (a == 0):
+    if (a == 0 and b == 0 and c == 0):
+        print("Reduced form: 0 = 0")
+    elif (a == 0 and b == 0):
+        print("Reduced form: {0} * X^0 = 0".format(c))
+    elif (a == 0 and c == 0):
+        print("Reduced form: {0} * X^1 = 0".format(b))
+    elif (b == 0 and c == 0):
+        print("Reduced form: {0} * X^2 = 0".format(a))
+    elif (a == 0):
         print("Reduced form: {0} * X^1 + {1} * X^0 = 0".format(b, c))
     elif (b == 0):
         print("Reduced form: {0} * X^2 + {1} * X^0 = 0".format(a, c))
