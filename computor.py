@@ -1,10 +1,9 @@
 import sys
 
 
-class InputError(Exception):
-    def __init__(self, equation):
-        Exception.__init__(self)
-        self.equation = equation
+def format_solution(value):
+    rounded_value = round(value, 6)
+    return 0 if rounded_value == -0.0 else rounded_value
 
 
 def ft_abs(x):
@@ -26,11 +25,6 @@ def ft_sqrt(n, EPS=1E-10):
 
 def discriminant(a, b, c):
     return b * b - 4 * a * c
-
-
-def format_solution(value):
-    rounded_value = round(value, 6)
-    return 0 if rounded_value == -0.0 else rounded_value
 
 
 def constant_solution(c):
@@ -67,6 +61,29 @@ def quadratic_solution(a, b, c):
     return
 
 
+def display_solution(a, b, c, degree):
+    if degree == 2:
+        quadratic_solution(a, b, c)
+    elif degree == 1:
+        linear_solution(b, c)
+    else:
+        constant_solution(c)
+    return
+
+
+def display_reduced(reduced_coefficient):
+    terms = []
+    for degree in reduced_coefficient:
+        coefficient = reduced_coefficient[degree]
+        if coefficient == 0 and len(reduced_coefficient) > 1:
+            continue
+        else:
+            terms.append(f"{coefficient} * X^{degree}")
+    
+    reduced_form = " + ".join(terms).replace("+ -", "- ")
+    print(f"\nReduced form: {reduced_form} = 0")
+
+
 def getCoefficientByDegree(reduced_coefficient):
     a = 0
     b = 0
@@ -85,37 +102,23 @@ def getCoefficientByDegree(reduced_coefficient):
     return a, b, c, degree
 
 
-def parseEquation(equation):
-    equation = equation.replace(' ', '').replace('-', '+-').split('=')
-
-    parts = [equation[i].split('+') for i in range(len(equation))]
-
-    if len(parts) != 2:
-        raise InputError("An equation has more than one equal sign or none at all")
-    for part in parts:
-        for term in part:
-            if term == '':
-                raise InputError("Invalid term in the equation")
-    return parts
-
-
-def parseCoefficients(part):
+def parseCoefficients(term):
     coefficients_dict = {}
     counted_degrees = []
 
-    for elem in part:
-        # print(f"\npart: {part}\nelem: {elem}")
+    for elem in term:
+        # print(f"\nterm: {term}\nelem: {elem}")
         if (elem[0] == '0' and len(elem) > 1) or elem == '':
             continue
         if "*" not in elem:
-            sys.exit("Error")
+            sys.exit("Error: Invalid term in the equation")
 
         coefficient, var = elem.split('*')
         var, degree = var.split('^')
 
         # print(f"\ncoefficient: {coefficient}\nvar: {var}\ndegree: {degree}")
         if var != 'X' and var != 'x':
-            raise InputError('The variable can only be X or x')
+            sys.exit("Error: The variable can only be X")
 
         try:
             degree = int(degree)
@@ -126,21 +129,35 @@ def parseCoefficients(part):
             coefficients_dict[degree] += coefficient
 
         except ValueError:
-            raise InputError('Incorrect degree. Must be greater then 0')
+            sys.exit("Error: Invalid terms in the equation")
 
     return coefficients_dict
 
 
+def parseEquation(equation):
+    equation = equation.replace(' ', '').replace('-', '+-').split('=')
+
+    terms = [equation[i].split('+') for i in range(len(equation))]
+
+    if len(terms) != 2:
+        sys.exit("Error: An equation must have exactly one equal sign")
+    for term in terms:
+        for term in term:
+            if term == '':
+                sys.exit("Error: Invalid term in the equation")
+    return terms
+
+
 def calculateCoefficients(equation):
-    parts = parseEquation(equation)
+    terms = parseEquation(equation)
     reduced_coefficients = {}
 
-    # print(f"\nparts: {parts}")
-    for index, part in enumerate(parts):
+    # print(f"\nterms: {terms}")
+    for index, term in enumerate(terms):
         if index == 0:
-            left_coefficients = dict(sorted(parseCoefficients(part).items(), reverse=True))
+            left_coefficients = dict(sorted(parseCoefficients(term).items(), reverse=True))
         else:
-            right_coefficients = dict(sorted(parseCoefficients(part).items(), reverse=True))
+            right_coefficients = dict(sorted(parseCoefficients(term).items(), reverse=True))
 
     degree_union = set(left_coefficients.keys()).union(set(right_coefficients.keys()))
     # print(f"\nUnion: {degree_union}")
@@ -152,29 +169,6 @@ def calculateCoefficients(equation):
         reduced_coefficients[degree] = left_value - right_value
 
     return dict(sorted(reduced_coefficients.items(), reverse=True))
-
-
-def display_reduced(reduced_coefficient):
-    terms = []
-    for degree in reduced_coefficient:
-        coefficient = reduced_coefficient[degree]
-        if coefficient == 0 and len(reduced_coefficient) > 1:
-            continue
-        else:
-            terms.append(f"{coefficient} * X^{degree}")
-    
-    reduced_form = " + ".join(terms).replace("+ -", "- ")
-    print(f"\nReduced form: {reduced_form} = 0")
-
-
-def display_solution(a, b, c, degree):
-    if degree == 2:
-        quadratic_solution(a, b, c)
-    elif degree == 1:
-        linear_solution(b, c)
-    else:
-        constant_solution(c)
-    return
 
 
 def solve(equation):
@@ -190,6 +184,7 @@ def solve(equation):
         print("The polynomial degree is stricly greater than 2, I can't solve.")
     else:
         display_solution(a, b, c, degree)
+    return
 
 
 def main():
@@ -200,8 +195,6 @@ def main():
         print("\nExiting...")
     except EOFError:
         print("\nExiting...")
-    except InputError:
-        print("Error")
 
 
 if __name__ == "__main__":
