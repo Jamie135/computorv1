@@ -56,8 +56,7 @@ def quadratic_solution(a, b, c):
             print("{0} + {1} * i".format(format_solution(real), format_solution(imaginary)))
             print("{0} - {1} * i".format(format_solution(real), format_solution(imaginary)))
     else:
-        print("Discriminant is zero")
-        print("The solution is: {}".format(format_solution(-b / (2 * a))))
+        print("Discriminant is zero, the solution is:\n{}".format(format_solution(-b / (2 * a))))
     return
 
 
