@@ -110,7 +110,7 @@ def parseCoefficients(term):
         # print(f"\nterm: {term}\nelem: {elem}")
         if (elem[0] == '0' and len(elem) > 1) or elem == '':
             continue
-        if "*" not in elem:
+        if "*" not in elem or "^" not in elem:
             sys.exit("Error: Invalid term in the equation")
 
         coefficient, var = elem.split('*')
